@@ -104,17 +104,7 @@ print_header()
 {
     printf "${PINK}"
     space
-    printf " ███▄ ▄███▓ ██▓ ███▄    █  ██▓\n"
-    printf "▓██▒▀█▀ ██▒▓██▒ ██ ▀█   █ ▓██▒\n"
-    printf "▓██    ▓██░▒██▒▓██  ▀█ ██▒▒██▒\n"
-    printf "▒██    ▒██ ░██░▓██▒  ▐▌██▒░██░\n"
-    printf "▒██▒   ░██▒░██░▒██░   ▓██░░██░\n"
-    printf "░ ▒░   ░  ░░▓  ░ ▒░   ▒ ▒ ░▓  \n"
-    printf "░  ░      ░ ▒ ░░ ░░   ░ ▒░ ▒ ░\n"
-    printf "░      ░    ▒ ░   ░   ░ ░  ▒ ░\n"
-    printf "       ░    ░           ░  ░  \n"
     printf "${DEFAULT}"
-    printf "${BLUE}Mini moulinette ${DEFAULT}version 0.1.21 27 Feb 2023.\n"
     space
 }
 
@@ -163,7 +153,6 @@ print_footer()
     end_time=$(date +%s)
     elapsed_time=$(expr $end_time - $start_time)
     printf "${GREY}Test completed. ${PINK}Total elapsed time: ${elapsed_time}s${DEFAULT}.\n"
-    printf "${BLUE}Mini moulinette is updated daily. Please remember to git pull today!\n${DEFAULT}"
     space
 }
 

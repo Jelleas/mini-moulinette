@@ -26,14 +26,14 @@ int main(void)
         {
             .desc = "Compare two different strings of equal length",
             .s1 = "Hello",
-            .s2 = "He",
-            .expected = 108,
+            .s2 = "Heqqo",
+            .expected = -1,
         },
         {
             .desc = "Compare two different strings of different length",
             .s1 = "Hello",
             .s2 = "Hello1",
-            .expected = -49,
+            .expected = -1,
         },
         {
             .desc = "Compare two empty strings",
@@ -45,7 +45,7 @@ int main(void)
             .desc = "Compare a string with an empty string",
             .s1 = "Hello",
             .s2 = "",
-            .expected = 72,
+            .expected = 1,
         },
         {
             .desc = "Compare two strings of length 1",
@@ -105,7 +105,7 @@ int main(void)
             .desc = "Compare two non-identical strings with different pointers",
             .s1 = "Hello",
             .s2 = strdup("World"),
-            .expected = -15,
+            .expected = -1,
         },
     };
     int count = sizeof(tests) / sizeof(tests[0]);
@@ -122,14 +122,38 @@ int run_tests(t_test *tests, int count)
     {
         int result = ft_strcmp(tests[i].s1, tests[i].s2);
 
-        if (result != tests[i].expected)
+        if ((result < 0 && tests[i].expected >= 0) ||
+            (result > 0 && tests[i].expected <= 0) ||
+            (result == 0 && tests[i].expected != 0))
         {
-            printf("    " RED "[%d] %s Expected %d, got %d\n", i + 1, tests[i].desc, tests[i].expected, result);
+            if (tests[i].expected < 0)
+            {
+                printf("    " RED "[%d] %s expected a negative number, got %d\n", i + 1, tests[i].desc, result);
+            }
+            else if (tests[i].expected > 0)
+            {
+                printf("    " RED "[%d] %s expected a positive number, got %d\n", i + 1, tests[i].desc, result);
+            }
+            else
+            {
+                printf("    " RED "[%d] %s expected 0, got %d\n", i + 1, tests[i].desc, result);
+            }
             error -= 1;
         }
         else
         {
-            printf("  " GREEN CHECKMARK GREY " [%d] %s Expected %d, got %d\n" DEFAULT, i + 1, tests[i].desc, tests[i].expected, result);
+            if (tests[i].expected < 0)
+            {
+                printf("  " GREEN CHECKMARK GREY "[%d] %s expected a negative number, got %d\n", i + 1, tests[i].desc, result);
+            }
+            else if (tests[i].expected > 0)
+            {
+                printf("  " GREEN CHECKMARK GREY "[%d] %s expected a positive number, got %d\n", i + 1, tests[i].desc, result);
+            }
+            else
+            {
+                printf("  " GREEN CHECKMARK GREY "[%d] %s expected 0, got %d\n", i + 1, tests[i].desc, result);
+            }
         }
     }
 

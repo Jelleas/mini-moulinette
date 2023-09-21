@@ -98,11 +98,13 @@ int run_test(t_test test, int test_num)
         {
             printf("    " RED "[%d] %s Expected \"%s\", got \"%s\"\n" DEFAULT, test_num, test.desc, test.expected, modify_string(buf));
             result = -1;
+            break;
         }
         else
         {
             printf("  " GREEN CHECKMARK GREY " [%d] %s output \"%s\" as expected\n" DEFAULT, test_num, test.desc, modify_string(buf));
             result = 0;
+            break;
         }
     }
 

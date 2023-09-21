@@ -10,8 +10,8 @@ typedef struct s_test
 {
     char *desc;
     char *command;
-    char **expected_files;
-    int n_files;
+    char **expectations;
+    int n;
 } t_test;
 
 int run_test(t_test test, int test_num);
@@ -23,14 +23,59 @@ int main(void)
         {
             .desc = "Makefile supports make all",
             .command = "make all",
-            .expected_files = (char *[]){
-                "srcs/ft_putchar.o",
-                "srcs/ft_putstr.o",
-                "srcs/ft_strcmp.o",
-                "srcs/ft_strlen.o",
-                "srcs/ft_swap.o"
+            .expectations = (char *[]){
+                "test -f srcs/ft_putchar.o",
+                "test -f srcs/ft_putstr.o",
+                "test -f srcs/ft_strcmp.o",
+                "test -f srcs/ft_strlen.o",
+                "test -f srcs/ft_swap.o",
+                "test -f libft.a"
             },
-            .n_files = 5
+            .n = 6
+        },
+        {
+            .desc = "Makefile supports make clean",
+            .command = "(make all && make clean)",
+            .expectations = (char *[]){
+                "! test -f srcs/*.o",
+                "test -f libft.a"
+            },
+            .n = 2
+        },
+        {
+            .desc = "Makefile supports make fclean",
+            .command = "(make all && make fclean)",
+            .expectations = (char *[]){
+                "! test -f srcs/*.0",
+                "! test -f libft.a"
+            },
+            .n = 2
+        },
+        {
+            .desc = "Makefile supports make re",
+            .command = "make re",
+            .expectations = (char *[]){
+                "test -f srcs/ft_putchar.o",
+                "test -f srcs/ft_putstr.o",
+                "test -f srcs/ft_strcmp.o",
+                "test -f srcs/ft_strlen.o",
+                "test -f srcs/ft_swap.o",
+                "test -f libft.a"
+            },
+            .n = 6
+        },
+        {
+            .desc = "Makefile supports make libft.a",
+            .command = "(make fclean && make libft.a)",
+            .expectations = (char *[]){
+                "test -f srcs/ft_putchar.o",
+                "test -f srcs/ft_putstr.o",
+                "test -f srcs/ft_strcmp.o",
+                "test -f srcs/ft_strlen.o",
+                "test -f srcs/ft_swap.o",
+                "test -f libft.a"
+            },
+            .n = 6
         }
     };
 
@@ -65,15 +110,12 @@ int run_test(t_test test, int test_num)
     system(make_command);
     free(make_command);
 
-    for (int i = 0; i < test.n_files; i++)
+    for (int i = 0; i < test.n; i++)
     {
-        char *test_command;
-        asprintf(&test_command, "test -f %s", test.expected_files[i]);
-        int test_result = system(test_command);
-        free(test_command);
+        int test_result = system(test.expectations[i]);
         if (test_result != 0)
         {
-            printf("    " RED "[%d] %s Expected file \"%s\" to exist.\n" DEFAULT, test_num, test.desc, test.expected_files[i]);
+            printf("    " RED "[%d] %s Expected \"%s\" to return 0.\n" DEFAULT, test_num, test.desc, test.expectations[i]);
             return -1;
         }
     }
